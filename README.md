@@ -30,4 +30,5 @@ df = pd.read_csv('https://raw.githubusercontent.com/brulint/kissbacktest/main/bt
 ```
 
 _To be continued_
+
 _Enjoy!_
