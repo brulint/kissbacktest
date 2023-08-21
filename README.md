@@ -29,4 +29,5 @@ df = pd.read_csv('https://raw.githubusercontent.com/brulint/kissbacktest/main/bt
 [2190 rows x 7 columns]
 ```
 
-
+_To be continued_
+_Enjoy!_
