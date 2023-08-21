@@ -9,13 +9,6 @@ _Quod de futuris non est determinata omnino veritas._
 
 Soit le cour d'un actif (ici le BTC/EUR 4h entre juillet 2022 et juillet 2023)
 
-Par exemple disponible ici:
-
-```python
-import pandas as pd
-df = pd.read_csv('https://raw.githubusercontent.com/brulint/kissbacktest/main/btceur_4h.csv')
-```
-
 <p align="center"><img src="img/2023-08-21 20:13:08.179580841 +0200.png"></p>
 
 Dans l'interval $[t_{n-1} \rightarrow t_n]$, le rendement vaut :
@@ -81,6 +74,32 @@ Avec:
   * en grisé, le rendement cumulé en HOLD
   * en bleu, le rendement brut cumulé de la stratégie
   * en rouge, le rendement net cumulé de la stratégie 
+
+## Implémentation
+
+```python
+import numpy as np
+import pandas as pd
+import talib as ta
+from bokeh.plotting import figure,show
+
+df = pd.read_csv('https://raw.githubusercontent.com/brulint/kissbacktest/main/btceur_4h.csv')
+
+# Strategy begin
+RSI = ta.RSI(df.close, timeperiod=14)
+SIG_achat = (RSI.shift() < 25) & (RSI > 25)
+SIG_vente = (RSI.shift() > 75) & (RSI < 75)
+# Strategy end
+
+POS = (SIG_achat.astype(int) - SIG_vente.astype(int)).replace(to_replace=0, method='ffill') > 0
+r_hodl = np.log(df.close / df.close.shift())
+r_strat = r_hodl * POS.shift() - 0.0025 * (POS != POS.shift())
+
+fig = figure()
+fig.line(df.time, r_hodl.cumsum(), color='lightgray')
+fig.line(df.time, r_strat.cumsum(), color='red')
+show(fig)
+```
 
 _To be continued_
 
