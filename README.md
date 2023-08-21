@@ -20,7 +20,7 @@ df = pd.read_csv('https://raw.githubusercontent.com/brulint/kissbacktest/main/bt
 
 Dans l'interval $[t_{n-1} \rightarrow t_n]$, le rendement vaut :
 
-$$ r_0(t_n) = r_0([t_{n-1} \rightarrow t_n]) = ln \biggl( { Prix(t_n) \over Prix(t_{n-1}) } \biggr) $$
+$$ r_{hodl}(t_n) = r_{hodl}([t_{n-1} \rightarrow t_n]) = ln \biggl( { Prix(t_n) \over Prix(t_{n-1}) } \biggr) $$
 
 ## Signaux et position
 
@@ -30,27 +30,57 @@ Dans notre exemple, la stratégie consiste à acheter quand le cours recommence 
 
 <p align="center"><img src="img/2023-08-21 20:13:14.203368676 +0200.png"></p>
 
-$$ SIG_{achat} = \biggl[ \  RSI_{14}(t_{n-1}) < 25 \  \biggl] \ \\& \ \biggl[ \  RSI_{14}(t_n) > 25 \  \biggr] $$
+$$ SIG_{achat}(t_n) = \biggl[ \  RSI_{14}(t_{n-1}) < 25 \  \biggl] \ \\& \ \biggl[ \  RSI_{14}(t_n) > 25 \  \biggr] $$
 
 <p align="center"><img src="img/2023-08-21 20:13:19.063197571 +0200.png"></p>
 
-$$ SIG_{vente} = \biggl[ \  RSI_{14}(t_{n-1}) > 75 \  \biggl] \ \\& \ \biggl[ \  RSI_{14}(t_n) < 75 \  \biggr] $$
+$$ SIG_{vente}(t_n) = \biggl[ \  RSI_{14}(t_{n-1}) > 75 \  \biggl] \ \\& \ \biggl[ \  RSI_{14}(t_n) < 75 \  \biggr] $$
 
 <p align="center"><img src="img/2023-08-21 20:13:24.730998091 +0200.png"></p>
+
+$$ SIG_0(t_n) = SIG_{achat}(t_n) - SIG_{vente}(t_n) $$
+
 <p align="center"><img src="img/2023-08-21 20:13:36.390587965 +0200.png"></p>
+
+$$ SIG_1(t_n) = \begin{cases} SIG_0(t_n) & \text{si } SIG_0(t_n) \ne 0 \\\\ SIG_0(t_{n-1}) & \text{sinon} \end{cases} $$
+
+$$ POS(t_n) = \biggl[ \  SIG_1(t_n) > 0 \  \biggr] $$
+
 <p align="center"><img src="img/2023-08-21 20:13:41.642403336 +0200.png"></p>
+
+## Rendement
+
+Interprétation du signal $POS$:
+
+  * $POS(t_{n-1}) = 0 \  \\& \  POS(t_n) = 0 \rightarrow$ Hors position de $t_{n-1}$ à $t_n$ $\rightarrow r_{strat}(t_n) = 0$
+  * $POS(t_{n-1}) = 0 \  \\& \  POS(t_n) = 1 \rightarrow$ Hors position de $t_{n-1}$ à $t_n$ et achat à l'instant $t_n$ $\rightarrow r_{strat}(t_n) = 0$
+  * $POS(t_{n-1}) = 1 \  \\& \  POS(t_n) = 1 \rightarrow$ En position de $t_{n-1}$ à $t_n$ $\rightarrow r_{strat}(t_n) = r_{hodl}(t_n)$
+  * $POS(t_{n-1}) = 1 \  \\& \  POS(t_n) = 0 \rightarrow$ En position de $t_{n-1}$ à $t_n$ et vente à l'instant $t_n$ $\rightarrow r_{strat}(t_n) = r_{hodl}(t_n)$
+
+$r_{strat}(t_n)$ est doc une fonction de $POS$:
+
+$$ r_{strat}(t_n) = \begin{cases} r_{hodl}(t_n) & \text{si } POS(t_{n-1}) = 1 \\\\ 0 & \text{sinon} \end{cases}  $$
+
+$$ \Rightarrow r_{strat}(t_n) = r_{hodl}(t_n) \times POS(t_{n-1}) $$
+
+Lors de chaque transaction (achat et vente), la plateforme prend un fee équivalent à $fee \%$:
+
+Même raisonnement que plus haut:
+
+$$ r_{fee}(t_n) = \begin{cases} fee & \text{si } POS(t_{n-1}) \neq POS(t_n) \\\\ 0 & \text{sinon} \end{cases} $$
+
+$$ \Rightarrow r_{fee}(t_n) = fee \times \biggl[ \ POS(t_{n-1}) \neq POS(t_n) \ \biggr] $$
+
 <p align="center"><img src="img/2023-08-21 20:13:46.774222986 +0200.png"></p>
+
+$$ R(t_n) = \sum_{i=1}^{t_n} \biggl( r_{strat}(i) - r_{fee}(i) \biggr) $$
+
 <p align="center"><img src="img/2023-08-21 20:13:52.218031736 +0200.png"></p>
 
-
-
-
-
-
-
-
-
-
+Avec:
+  * en grisé, le rendement cumulé en HOLD
+  * en bleu, le rendement brut cumulé de la stratégie
+  * en rouge, le rendement net cumulé de la stratégie 
 
 _To be continued_
 
