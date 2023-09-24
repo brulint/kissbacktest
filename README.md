@@ -11,10 +11,6 @@ Soit le cour d'un actif (ici le BTC/EUR 4h entre juillet 2022 et juillet 2023)
 
 <p align="center"><img src="img/2023-08-21 20:13:08.179580841 +0200.png"></p>
 
-Dans l'interval $[t_{n-1} \rightarrow t_n]$, le rendement vaut :
-
-$$ r_{hodl}(t_n) = r_{hodl}([t_{n-1} \rightarrow t_n]) = ln \biggl( { Prix(t_n) \over Prix(t_{n-1}) } \biggr) $$
-
 ## Signaux et position
 
 La stratégie consiste à déterminer selon certains critères établis préalablement, les instants $t_n$ pendant lesquels le marché est favorable à l'achat ($SIG_{achat}(t_n) = 1$) et/ou à la vente (\$SIG_{vente}(t_n) = 1$). Entre le $1^{er}$ signal d'achat et le $1^{er}$ signal de vente suivant, on est en position.
@@ -42,6 +38,10 @@ $$ POS(t_n) = \biggl[ \  SIG_1(t_n) > 0 \  \biggr] $$
 <p align="center"><img src="img/2023-08-21 20:13:41.642403336 +0200.png"></p>
 
 ## Rendement
+
+Dans l'interval $[t_{n-1} \rightarrow t_n]$, le rendement vaut :
+
+$$ r_{hodl}(t_n) = r_{hodl}([t_{n-1} \rightarrow t_n]) = ln \biggl( { Prix(t_n) \over Prix(t_{n-1}) } \biggr) $$
 
 Interprétation du signal $POS$:
 
