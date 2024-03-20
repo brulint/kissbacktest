@@ -83,7 +83,7 @@ import pandas as pd
 import talib as ta
 from bokeh.plotting import figure,show
 
-df = pd.read_csv('https://raw.githubusercontent.com/brulint/kissbacktest/main/btceur_4h.csv')
+df = pd.read_csv('https://raw.githubusercontent.com/carboleum/kissbacktest/main/btceur_4h.csv')
 
 # Strategy begin
 RSI = ta.RSI(df.close, timeperiod=14)
