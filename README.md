@@ -50,7 +50,7 @@ Interprétation du signal $POS$:
   * $POS(t_{n-1}) = 1 \  \\& \  POS(t_n) = 1 \rightarrow$ En position de $t_{n-1}$ à $t_n$ $\rightarrow r_{strat}(t_n) = r_{hodl}(t_n)$
   * $POS(t_{n-1}) = 1 \  \\& \  POS(t_n) = 0 \rightarrow$ En position de $t_{n-1}$ à $t_n$ et vente à l'instant $t_n$ $\rightarrow r_{strat}(t_n) = r_{hodl}(t_n)$
 
-$r_{strat}(t_n)$ est doc une fonction de $POS$:
+$r_{strat}(t_n)$ est doc une fonction de $POS(t_{n-1})$:
 
 $$ r_{strat}(t_n) = \begin{cases} r_{hodl}(t_n) & \text{si } POS(t_{n-1}) = 1 \\\\ 0 & \text{sinon} \end{cases}  $$
 
