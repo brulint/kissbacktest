@@ -3,9 +3,11 @@
 
 ## Disclamer
 
-_Quod de futuris non est determinata omnino veritas._
+_Quod de futuris non est determinata omnino veritas._ [^1]
 
-## Download data
+[^1]: "No truth can be determined with certainty about the future." Letter from Nostradamus to Henri II
+
+## Explication
 
 Soit le cour d'un actif (ici le BTC/EUR 4h entre juillet 2022 et juillet 2023)
 
@@ -50,7 +52,7 @@ Interprétation du signal $POS$:
   * $POS(t_{n-1}) = 1 \  \\& \  POS(t_n) = 1 \rightarrow$ En position de $t_{n-1}$ à $t_n$ $\rightarrow r_{strat}(t_n) = r_{hodl}(t_n)$
   * $POS(t_{n-1}) = 1 \  \\& \  POS(t_n) = 0 \rightarrow$ En position de $t_{n-1}$ à $t_n$ et vente à l'instant $t_n$ $\rightarrow r_{strat}(t_n) = r_{hodl}(t_n)$
 
-$r_{strat}(t_n)$ est doc une fonction de $POS(t_{n-1})$:
+$r_{strat}(t_n)$ est donc une fonction de $POS(t_{n-1})$:
 
 $$ r_{strat}(t_n) = \begin{cases} r_{hodl}(t_n) & \text{si } POS(t_{n-1}) = 1 \\\\ 0 & \text{sinon} \end{cases}  $$
 
@@ -76,6 +78,28 @@ Avec:
   * en rouge, le rendement net cumulé de la stratégie 
 
 ## Implémentation
+
+### Install TALib
+
+To take full advantage of all features (technical indicators), you have to install TALib.
+
+```bash
+sudo apt install -y build-essential wget
+wget http://prdownloads.sourceforge.net/ta-lib/ta-lib-0.4.0-src.tar.gz
+tar -xvf ta-lib-0.4.0-src.tar.gz
+cd ta-lib
+./configure --prefix=/usr
+make
+sudo make install
+```
+
+### Install Python Libraries
+
+```bash
+sudo pip3 install TA-Lib bokeh
+```
+
+### Backtesting
 
 ```python
 import numpy as np
