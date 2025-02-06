@@ -93,9 +93,9 @@ sudo pip3 install TA-Lib bokeh
 
 ### Download data
 
-Download the 'btceur_4h.csv' from this repository
+Download the 'btceur_4h.csv' from this repository.
 
-or download [the .cvs file directly from Kraken.com](https://support.kraken.com/hc/en-us/articles/360047124832-Downloadable-historical-OHLCVT-Open-High-Low-Close-Volume-Trades-data) and rename it:
+or download [the .cvs file directly from Kraken.com](https://support.kraken.com/hc/en-us/articles/360047124832-Downloadable-historical-OHLCVT-Open-High-Low-Close-Volume-Trades-data) and add "time,open,high,low,close,volume,count" a the first line.
 
 ### Backtesting
 
