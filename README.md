@@ -99,7 +99,7 @@ import pandas as pd
 import talib as ta
 from bokeh.plotting import figure,show
 
-df = pd.read_csv('https://raw.githubusercontent.com/carboleum/kissbacktest/main/btceur_4h.csv')
+df = pd.read_csv(Downloads/btceur_4h.csv')
 
 # Strategy begin
 RSI = ta.RSI(df.close, timeperiod=14)
@@ -115,7 +115,7 @@ r_netto = r_strat - 0.0025 * (POS != POS.shift())
 fig = figure(height=300)
 fig.line(df.time, r_hodl.cumsum(), color='lightgray')
 fig.line(df.time, r_strat.cumsum(), color='blue')
-fig.line(df.time, r_netto.cumcum(), color='red')
+fig.line(df.time, r_netto.cumsum(), color='red')
 show(fig)
 ```
 
