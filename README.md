@@ -115,7 +115,7 @@ SIG_vente = (RSI.shift() > 75) & (RSI < 75)
 
 POS = (SIG_achat.astype(int) - SIG_vente.astype(int)).replace(to_replace=0, method='ffill') > 0
 r_hodl = np.log(df.close / df.close.shift())
-r_strat = r_hodl * POS.shift()
+r_strat = r_hodl * (POS.shift() == 1)
 r_netto = r_strat - 0.0025 * (POS != POS.shift())
 
 fig = figure(height=300)
