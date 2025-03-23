@@ -43,7 +43,7 @@ $$ POS(t_n) = \biggl[ \  SIG_1(t_n) > 0 \  \biggr] $$
 
 Dans l'interval $[t_{n-1} \rightarrow t_n]$, le rendement vaut :
 
-$$ r_{hodl}(t_n) = r_{hodl}([t_{n-1} \rightarrow t_n]) = ln \biggl( { Prix(t_n) \over Prix(t_{n-1}) } \biggr) $$
+$$ r_{hodl}(t_n) = r_{hodl}([t_{n-1} \rightarrow t_n]) = \ln \biggl( { Prix(t_n) \over Prix(t_{n-1}) } \biggr) $$
 
 Interprétation du signal $POS$:
 
@@ -56,7 +56,7 @@ $r_{strat}(t_n)$ est donc une fonction de $POS(t_{n-1})$:
 
 $$ r_{strat}(t_n) = \begin{cases} r_{hodl}(t_n) & \text{si } POS(t_{n-1}) = 1 \\\\ 0 & \text{sinon} \end{cases}  $$
 
-$$ \Rightarrow r_{strat}(t_n) = r_{hodl}(t_n) \times POS(t_{n-1}) $$
+$$ \Rightarrow r_{strat}(t_n) = r_{hodl}(t_n) \times \biggl[ POS(t_{n-1}) \biggr] $$
 
 Lors de chaque transaction (achat et vente), la plateforme prend un fee équivalent à $fee \%$:
 
@@ -68,9 +68,9 @@ $$ \Rightarrow r_{fee}(t_n) = fee \times \biggl[ \ POS(t_{n-1}) \neq POS(t_n) \ 
 
 <p align="center"><img src="img/2023-08-21 20:13:46.774222986 +0200.png"></p>
 
-$$ R(t_n) = \sum_{i=1}^{t_n} \biggl( r_{strat}(i) - r_{fee}(i) \biggr) $$
+$$ R(t_n) = \exp \left( \sum_{i=1}^{t_n} \left( r_{strat}(i) - r_{fee}(i) \right) \right) $$
 
-<p align="center"><img src="img/2023-08-21 20:13:52.218031736 +0200.png"></p>
+<p align="center"><img src="img/2025-03-23 11_13_52.png"></p>
 
 Avec:
   * en grisé, le rendement cumulé en HOLD
@@ -119,9 +119,9 @@ r_strat = r_hodl * POS.shift()
 r_netto = r_strat - 0.0025 * (POS != POS.shift())
 
 fig = figure(height=300)
-fig.line(df.time, r_hodl.cumsum(), color='lightgray')
-fig.line(df.time, r_strat.cumsum(), color='blue')
-fig.line(df.time, r_netto.cumsum(), color='red')
+fig.line(df.time, np.exp(r_hodl.cumsum()), color='lightgray')
+fig.line(df.time, np.exp(r_strat.cumsum()), color='blue')
+fig.line(df.time, np.exp(r_netto.cumsum()), color='red')
 show(fig)
 ```
 
