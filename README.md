@@ -19,15 +19,23 @@ La stratégie consiste à déterminer selon certains critères établis préalab
 
 Dans notre exemple, la stratégie consiste à acheter quand le cours recommence à monter après une chute et de vendre quand le cours recommence à descendre. On va utiliser le RSI:
 
+### RSI
+
 <p align="center"><img src="img/2023-08-21 20:13:14.203368676 +0200.png"></p>
+
+### Signal d'achat
 
 $$ SIG_{achat}(t_n) = \biggl[ \  RSI_{14}(t_{n-1}) < 25 \  \biggl] \ \\& \ \biggl[ \  RSI_{14}(t_n) > 25 \  \biggr] $$
 
 <p align="center"><img src="img/2023-08-21 20:13:19.063197571 +0200.png"></p>
 
+### Signal de vente
+
 $$ SIG_{vente}(t_n) = \biggl[ \  RSI_{14}(t_{n-1}) > 75 \  \biggl] \ \\& \ \biggl[ \  RSI_{14}(t_n) < 75 \  \biggr] $$
 
 <p align="center"><img src="img/2023-08-21 20:13:24.730998091 +0200.png"></p>
+
+### Position
 
 $$ SIG_0(t_n) = SIG_{achat}(t_n) - SIG_{vente}(t_n) $$
 
@@ -113,7 +121,8 @@ SIG_achat = (RSI.shift() < 25) & (RSI > 25)
 SIG_vente = (RSI.shift() > 75) & (RSI < 75)
 # Strategy end
 
-POS = (SIG_achat.astype(int) - SIG_vente.astype(int)).replace(to_replace=0, method='ffill') > 0
+POS = (SIG_achat.astype(int) - SIG_vente.astype(int)).
+POS = POS.replace(to_replace=0, method='ffill') > 0
 r_hodl = np.log(df.close / df.close.shift())
 r_strat = r_hodl * (POS.shift() == 1)
 r_netto = r_strat - 0.0025 * (POS != POS.shift())
