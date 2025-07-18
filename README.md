@@ -70,9 +70,9 @@ Lors de chaque transaction (achat et vente), la plateforme prend un fee équival
 
 Même raisonnement que plus haut:
 
-$$ r_{fee}(t_n) = \begin{cases} fee & \text{si } POS(t_{n-1}) \neq POS(t_n) \\\\ 0 & \text{sinon} \end{cases} $$
+$$ r_{fee}(t_n) = \begin{cases} \ln(1-fee) & \text{si } POS(t_{n-1}) \neq POS(t_n) \\\\ 0 & \text{sinon} \end{cases} $$
 
-$$ \Rightarrow r_{fee}(t_n) = fee \times \biggl[ \ POS(t_{n-1}) \neq POS(t_n) \ \biggr] $$
+$$ \Rightarrow r_{fee}(t_n) = \ln(1-fee) \times \biggl[ \ POS(t_{n-1}) \neq POS(t_n) \ \biggr] $$
 
 <p align="center"><img src="img/2023-08-21 20:13:46.774222986 +0200.png"></p>
 
@@ -121,11 +121,12 @@ SIG_achat = (RSI.shift() < 25) & (RSI > 25)
 SIG_vente = (RSI.shift() > 75) & (RSI < 75)
 # Strategy end
 
-POS = (SIG_achat.astype(int) - SIG_vente.astype(int)).
+POS = (SIG_achat.astype(int) - SIG_vente.astype(int))
 POS = POS.replace(to_replace=0, method='ffill') > 0
+fee = np.log(1 - 0.0025)
 r_hodl = np.log(df.close / df.close.shift())
 r_strat = r_hodl * (POS.shift() == 1)
-r_netto = r_strat - 0.0025 * (POS != POS.shift())
+r_netto = r_strat + fee * (POS != POS.shift())
 
 fig = figure(height=300)
 fig.line(df.time, np.exp(r_hodl.cumsum()), color='lightgray')
