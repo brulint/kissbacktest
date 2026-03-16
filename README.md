@@ -64,19 +64,19 @@ $r_{strat}(t_n)$ est donc une fonction de $POS(t_{n-1})$:
 
 $$ r_{strat}(t_n) = \begin{cases} r_{hodl}(t_n) & \text{si } POS(t_{n-1}) = 1 \\\\ 0 & \text{sinon} \end{cases}  $$
 
-$$ \Rightarrow r_{strat}(t_n) = r_{hodl}(t_n) \times \biggl[ POS(t_{n-1}) \biggr] $$
+$$ \Rightarrow r_{strat}(t_n) = r_{hodl}(t_n) \times \biggl[ POS(t_{n-1}) = 1 \biggr] $$
 
 Lors de chaque transaction (achat et vente), la plateforme prend un fee équivalent à $fee \%$:
 
 Même raisonnement que plus haut:
 
-$$ r_{fee}(t_n) = \begin{cases} fee & \text{si } POS(t_{n-1}) \neq POS(t_n) \\\\ 0 & \text{sinon} \end{cases} $$
+$$ r_{fee}(t_n) = \begin{cases} \ln(1-fee) & \text{si } POS(t_{n-1}) \neq POS(t_n) \\\\ 0 & \text{sinon} \end{cases} $$
 
-$$ \Rightarrow r_{fee}(t_n) = fee \times \biggl[ \ POS(t_{n-1}) \neq POS(t_n) \ \biggr] $$
+$$ \Rightarrow r_{fee}(t_n) = \ln(1-fee) \times \biggl[ \ POS(t_{n-1}) \neq POS(t_n) \ \biggr] $$
 
 <p align="center"><img src="img/2023-08-21 20:13:46.774222986 +0200.png"></p>
 
-$$ R(t_n) = \exp \left( \sum_{i=1}^{t_n} \left( r_{strat}(i) - r_{fee}(i) \right) \right) $$
+$$ R(t_n) = \exp \left( \sum_{i=1}^{t_n} \left( r_{strat}(i) + r_{fee}(i) \right) \right) $$
 
 <p align="center"><img src="img/2025-03-23 11_13_52.png"></p>
 
@@ -124,11 +124,11 @@ SIG_vente = (RSI.shift() > 75) & (RSI < 75)
 POS = (SIG_achat.astype(int) - SIG_vente.astype(int))
 POS = POS.replace(to_replace=0, method='ffill') > 0
 
-fee = 0.0025 # 0.25% par transaction
+fee = np.log(1 - 0.0025) # 0.25% par transaction
 r_hodl = np.log(df.close / df.close.shift())
 r_strat = r_hodl * (POS.shift() == 1)
 r_fee = fee * (POS != POS.shift())
-r_netto = r_strat - r_fee
+r_netto = r_strat + r_fee
 
 fig = figure(height=300)
 fig.line(df.time, np.exp(r_hodl.cumsum()), color='lightgray')
